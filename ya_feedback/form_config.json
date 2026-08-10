@@ -1,5 +1,5 @@
 {
-  "title": "Young Adults Fellowship Monthly Feedback",
+  "title": "Young Adults Fellowship Feedback",
   "description": "This survey is anonymous. Please share your honest feedback about the monthly fellowship. Your feedback will help us improve our fellowship, plan future activities, and identify opportunities to serve and reach others.",
   "fields": [
     {
@@ -16,6 +16,12 @@
       "required": false
     },
     {
+      "name": "attendance_experience_improvement",
+      "label": "If you mentioned \"Needs Improvement\" in the previous question, please suggest what we can improve?",
+      "type": "text",
+      "required": false
+    },
+    {
       "name": "schedule_rating",
       "label": "How do you feel about the current fellowship schedule and timing?",
       "type": "radio",
@@ -23,7 +29,6 @@
         "Very good",
         "Good",
         "Okay",
-        "Needs Improvement",
         "Do not wish to answer"
       ],
       "required": false
@@ -74,6 +79,12 @@
       "required": false
     },
     {
+      "name": "study_rating_improvement",
+      "label": "If you mentioned \"Needs Improvement\" in the previous question, please suggest what we can improve?",
+      "type": "text",
+      "required": false
+    },
+    {
       "name": "study_suggestions",
       "label": "Are there any specific Bible passages, topics, or questions you would like us to discuss?",
       "type": "text",
@@ -102,9 +113,7 @@
         "Team Games",
         "Bible Trivia",
         "Group Discussions",
-        "Creative Activities",
         "More Bible Study",
-        "Other",
         "Do not wish to answer"
       ],
       "required": false
@@ -143,7 +152,7 @@
     },
     {
       "name": "outreach_ideas",
-      "label": "What outreach activities do you think would work well for our young adults fellowship?",
+      "label": "What outreach activities do you think would work well for our young adults fellowship? (multiple choices allowed)",
       "type": "checkbox",
       "options": [
         "Community Service",
@@ -187,21 +196,20 @@
     },
     {
       "name": "participation_barriers",
-      "label": "What makes it difficult for you to participate regularly in the Saturday morning prayer?",
+      "label": "What makes it difficult for you to participate regularly in the Saturday morning prayer? (multiple choices allowed)",
       "type": "checkbox",
       "options": [
         "Work Schedule",
         "Family Commitments",
         "Timing of prayer",
         "Not Knowing What to Expect",
-        "Other",
         "Do not wish to answer"
       ],
       "required": false
     },
     {
       "name": "next_prayer_attendance",
-      "label": "Would you be able to attend the prayer if we change it to another day? If so, can you mention your preference",
+      "label": "Would you be able to attend the prayer if we change it to another day? If so, can you mention your preference?",
       "type": "text",
       "required": false
     },

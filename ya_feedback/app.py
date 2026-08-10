@@ -26,8 +26,27 @@ SERVICE_ACCOUNT_FILE = resolve_path(
     "credentials.json",
 )
 SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
-SHEET_URL = os.getenv("GOOGLE_SHEET_URL")
-WORKSHEET_NAME = os.getenv("GOOGLE_WORKSHEET_NAME", "Feedback")
+
+
+def get_secret_value(env_name: str, secret_name: str, default=None):
+    env_value = os.getenv(env_name)
+    if env_value:
+        return env_value
+
+    try:
+        google_secret = st.secrets.get("google", {})
+    except Exception:
+        google_secret = {}
+
+    value = google_secret.get(secret_name, default)
+    if value is not None:
+        return value
+
+    return default
+
+
+SHEET_URL = get_secret_value("GOOGLE_SHEET_URL", "sheet_url")
+WORKSHEET_NAME = get_secret_value("GOOGLE_WORKSHEET_NAME", "worksheet_name", "Feedback")
 CONFIG_FILE = resolve_path(os.getenv("FORM_CONFIG_FILE", "form_config.json"), "form_config.json")
 
 
@@ -85,14 +104,20 @@ def get_service_credentials():
 
 @st.cache_resource
 def get_gsheet_client():
-    if not SHEET_URL:
-        raise ValueError("Please set GOOGLE_SHEET_URL in your environment or .env file.")
+    sheet_url = get_secret_value("GOOGLE_SHEET_URL", "sheet_url")
+    worksheet_name = get_secret_value("GOOGLE_WORKSHEET_NAME", "worksheet_name", "Feedback")
+
+    if not sheet_url:
+        raise ValueError(
+            "Please set GOOGLE_SHEET_URL in your environment, .env file, "
+            "or Streamlit secrets under [google].sheet_url."
+        )
 
     scope = ["https://www.googleapis.com/auth/spreadsheets"]
     credentials = get_service_credentials().with_scopes(scope)
     client = gspread.authorize(credentials)
-    spreadsheet = client.open_by_url(SHEET_URL)
-    worksheet = spreadsheet.worksheet(WORKSHEET_NAME)
+    spreadsheet = client.open_by_url(sheet_url)
+    worksheet = spreadsheet.worksheet(worksheet_name)
     return worksheet
 
 
