@@ -1,0 +1,227 @@
+{
+  "title": "Young Adults Fellowship Monthly Feedback",
+  "description": "This survey is anonymous. Please share your honest feedback about the monthly fellowship. Your feedback will help us improve our fellowship, plan future activities, and identify opportunities to serve and reach others.",
+  "fields": [
+    {
+      "name": "attendance_experience",
+      "label": "How would you rate your overall fellowship experience this year?",
+      "type": "radio",
+      "options": [
+        "Excellent",
+        "Good",
+        "Okay",
+        "Needs Improvement",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "schedule_rating",
+      "label": "How do you feel about the current fellowship schedule and timing?",
+      "type": "radio",
+      "options": [
+        "Very good",
+        "Good",
+        "Okay",
+        "Needs Improvement",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "schedule_feedback",
+      "label": "Is there anything about the timing or flow of the fellowship that you would change?",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "prayer_feedback",
+      "label": "How meaningful have you found the prayer time during fellowship?",
+      "type": "radio",
+      "options": [
+        "Very meaningful",
+        "Meaningful",
+        "Somewhat meaningful",
+        "Not very meaningful",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "testimony_feedback",
+      "label": "How do you feel about having an opportunity for people to share testimonies?",
+      "type": "radio",
+      "options": [
+        "I really value this",
+        "I like it",
+        "I'm okay with it",
+        "I would prefer a different format",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "study_rating",
+      "label": "How would you rate the Bible study / teaching (Revelation)?",
+      "type": "radio",
+      "options": [
+        "Excellent",
+        "Good",
+        "Okay",
+        "Needs Improvement",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "study_suggestions",
+      "label": "Are there any specific Bible passages, topics, or questions you would like us to discuss?",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "summer_activities",
+      "label": "How do you feel about having outdoor activities and sports during the summer?",
+      "type": "radio",
+      "options": [
+        "I really enjoy them",
+        "I enjoy them",
+        "I'm okay with them",
+        "I would prefer more fellowship/study time",
+        "I would prefer different activities",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "winter_activities",
+      "label": "What types of indoor activities would you like us to have during the winter?",
+      "type": "checkbox",
+      "options": [
+        "Board Games",
+        "Team Games",
+        "Bible Trivia",
+        "Group Discussions",
+        "Workshops",
+        "Movie / Video Discussion",
+        "Creative Activities",
+        "More Bible Study",
+        "Other",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "fellowship_connection",
+      "label": "Do you feel the fellowship is helping you build meaningful relationships with other young adults?",
+      "type": "radio",
+      "options": [
+        "Definitely",
+        "Mostly",
+        "Somewhat",
+        "Not really",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "fellowship_connection_suggestions",
+      "label": "What could we do to help people connect and get to know each other better?",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "outreach_interest",
+      "label": "Would you be interested in helping plan or participate in outreach activities?",
+      "type": "radio",
+      "options": [
+        "Yes, I would love to help",
+        "Yes, occasionally",
+        "Maybe, I would like more information",
+        "Not at this time",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "outreach_ideas",
+      "label": "What outreach activities do you think would work well for our young adults fellowship?",
+      "type": "checkbox",
+      "options": [
+        "Community Service",
+        "Food / Meal Outreach",
+        "Visiting Seniors",
+        "Helping Families in Need",
+        "Youth / Children's Activities",
+        "Sports Outreach",
+        "Park / Community Events",
+        "Evangelism / Sharing Faith",
+        "Fundraising for a Community Cause",
+        "Other",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "outreach_suggestions",
+      "label": "If you have an outreach idea, please describe it. What could we do, who could we reach, or where could we serve?",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "whatsapp_poll_feedback",
+      "label": "How do you feel about using WhatsApp polls to plan and organize fellowship?",
+      "type": "radio",
+      "options": [
+        "Very useful",
+        "Useful",
+        "Okay",
+        "I would prefer another method",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "whatsapp_poll_feedback_text",
+      "label": "If you chose \"I would prefer another method\" can you let us know that. This will help decide it could be used to better organize?",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "participation_barriers",
+      "label": "What makes it difficult for you to participate regularly in the Saturday morning prayer?",
+      "type": "checkbox",
+      "options": [
+        "Work Schedule",
+        "School / Studies",
+        "Family Commitments",
+        "Transportation",
+        "Timing of Fellowship",
+        "Not Knowing What to Expect",
+        "Activities Don't Interest Me",
+        "I Don't Have Any Major Barriers",
+        "Other",
+        "Do not wish to answer"
+      ],
+      "required": false
+    },
+    {
+      "name": "next_prayer_attendance",
+      "label": "Would you be able to attend the prayer if we change it to another day? If so, can you mention your preference",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "next_fellowship",
+      "label": "What is one thing you would like us to add, change, or improve for the next fellowship or going further?",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "additional_feedback",
+      "label": "Is there anything else you would like the fellowship leaders to know?",
+      "type": "text",
+      "required": false
+    }
+  ]
+}
