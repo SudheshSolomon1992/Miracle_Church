@@ -95,15 +95,13 @@
     },
     {
       "name": "winter_activities",
-      "label": "What types of indoor activities would you like us to have during the winter?",
+      "label": "What types of indoor activities would you like us to have during the winter? (multiple choices allowed)",
       "type": "checkbox",
       "options": [
         "Board Games",
         "Team Games",
         "Bible Trivia",
         "Group Discussions",
-        "Workshops",
-        "Movie / Video Discussion",
         "Creative Activities",
         "More Bible Study",
         "Other",
@@ -193,13 +191,9 @@
       "type": "checkbox",
       "options": [
         "Work Schedule",
-        "School / Studies",
         "Family Commitments",
-        "Transportation",
-        "Timing of Fellowship",
+        "Timing of prayer",
         "Not Knowing What to Expect",
-        "Activities Don't Interest Me",
-        "I Don't Have Any Major Barriers",
         "Other",
         "Do not wish to answer"
       ],
