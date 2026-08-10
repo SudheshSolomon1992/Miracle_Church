@@ -31,31 +31,55 @@ WORKSHEET_NAME = os.getenv("GOOGLE_WORKSHEET_NAME", "Feedback")
 CONFIG_FILE = resolve_path(os.getenv("FORM_CONFIG_FILE", "form_config.json"), "form_config.json")
 
 
+def _normalize_service_account_info(value):
+    if value is None:
+        raise ValueError("Google service account secret is empty.")
+
+    if isinstance(value, str):
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "Google service account secret must be valid JSON or a TOML dictionary. "
+                "For Streamlit secrets, use a TOML table like [google] with the service account keys."
+            ) from exc
+
+    if isinstance(value, dict):
+        if "service_account" in value and isinstance(value["service_account"], dict):
+            return value["service_account"]
+        if "type" in value and ("private_key" in value or "client_email" in value):
+            return value
+
+    raise ValueError(
+        "The Google service account secret must be a valid dictionary with the standard service account keys."
+    )
+
+
 def get_service_credentials():
     if os.path.exists(SERVICE_ACCOUNT_FILE):
         return Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE)
 
     if SERVICE_ACCOUNT_JSON:
-        service_account_info = json.loads(SERVICE_ACCOUNT_JSON)
+        service_account_info = _normalize_service_account_info(SERVICE_ACCOUNT_JSON)
         return Credentials.from_service_account_info(service_account_info)
 
     try:
         google_secret = st.secrets.get("google", {})
-        secret_data = google_secret.get("service_account_json")
-        if not secret_data:
-            raise KeyError("Missing google.service_account_json in Streamlit secrets")
+        if not google_secret:
+            raise KeyError("Missing [google] in Streamlit secrets")
 
-        if isinstance(secret_data, str):
-            service_account_info = json.loads(secret_data)
+        secret_data = google_secret.get("service_account_json")
+        if secret_data is not None:
+            service_account_info = _normalize_service_account_info(secret_data)
         else:
-            service_account_info = secret_data
+            service_account_info = _normalize_service_account_info(google_secret)
 
         return Credentials.from_service_account_info(service_account_info)
     except Exception:
         raise FileNotFoundError(
             "No Google service account credentials were found. "
             "Use either a local credentials.json file, a GOOGLE_SERVICE_ACCOUNT_JSON env var, "
-            "or a local .streamlit/secrets.toml / Streamlit Cloud secret named google.service_account_json."
+            "or a valid TOML [google] section in .streamlit/secrets.toml / Streamlit Cloud secrets."
         )
 
 
