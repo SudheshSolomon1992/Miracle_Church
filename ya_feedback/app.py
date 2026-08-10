@@ -1,5 +1,6 @@
 import json
 import os
+from collections.abc import Mapping
 from datetime import datetime
 
 import gspread
@@ -34,13 +35,16 @@ def get_secret_value(env_name: str, secret_name: str, default=None):
         return env_value
 
     try:
-        google_secret = st.secrets.get("google", {})
+        google_secret = st.secrets["google"]
     except Exception:
         google_secret = {}
 
-    value = google_secret.get(secret_name, default)
-    if value is not None:
-        return value
+    if isinstance(google_secret, Mapping):
+        for key in (secret_name, env_name.lower(), env_name):
+            if key in google_secret:
+                value = google_secret[key]
+                if value is not None:
+                    return value
 
     return default
 
@@ -63,11 +67,11 @@ def _normalize_service_account_info(value):
                 "For Streamlit secrets, use a TOML table like [google] with the service account keys."
             ) from exc
 
-    if isinstance(value, dict):
-        if "service_account" in value and isinstance(value["service_account"], dict):
-            return value["service_account"]
+    if isinstance(value, Mapping):
+        if "service_account" in value and isinstance(value["service_account"], Mapping):
+            return dict(value["service_account"])
         if "type" in value and ("private_key" in value or "client_email" in value):
-            return value
+            return dict(value)
 
     raise ValueError(
         "The Google service account secret must be a valid dictionary with the standard service account keys."
@@ -83,23 +87,30 @@ def get_service_credentials():
         return Credentials.from_service_account_info(service_account_info)
 
     try:
-        google_secret = st.secrets.get("google", {})
-        if not google_secret:
-            raise KeyError("Missing [google] in Streamlit secrets")
-
-        secret_data = google_secret.get("service_account_json")
-        if secret_data is not None:
-            service_account_info = _normalize_service_account_info(secret_data)
-        else:
-            service_account_info = _normalize_service_account_info(google_secret)
-
-        return Credentials.from_service_account_info(service_account_info)
-    except Exception:
+        google_secret = st.secrets["google"]
+    except Exception as exc:
         raise FileNotFoundError(
             "No Google service account credentials were found. "
             "Use either a local credentials.json file, a GOOGLE_SERVICE_ACCOUNT_JSON env var, "
             "or a valid TOML [google] section in .streamlit/secrets.toml / Streamlit Cloud secrets."
+        ) from exc
+
+    if not isinstance(google_secret, Mapping):
+        raise FileNotFoundError(
+            "The Google secret exists, but it is not in the expected dictionary format."
         )
+
+    if "service_account" in google_secret and isinstance(google_secret["service_account"], Mapping):
+        return Credentials.from_service_account_info(dict(google_secret["service_account"]))
+
+    if "type" in google_secret and ("private_key" in google_secret or "client_email" in google_secret):
+        return Credentials.from_service_account_info(dict(google_secret))
+
+    raise FileNotFoundError(
+        "No Google service account credentials were found. "
+        "Use either a local credentials.json file, a GOOGLE_SERVICE_ACCOUNT_JSON env var, "
+        "or a valid TOML [google] section in .streamlit/secrets.toml / Streamlit Cloud secrets."
+    )
 
 
 @st.cache_resource
@@ -133,6 +144,18 @@ def load_config():
 
 
 st.set_page_config(page_title="Miracle Church Feedback", page_icon="💬", layout="wide")
+
+access_code = None
+try:
+    access_code = st.secrets["google"].get("access_code")
+except Exception:
+    access_code = None
+
+if access_code:
+    entered_code = st.text_input("Access code", type="password", placeholder="Enter the access code to continue")
+    if entered_code != access_code:
+        st.warning("Please enter the correct access code to continue.")
+        st.stop()
 
 config = load_config()
 
@@ -435,11 +458,18 @@ with st.container():
                     key=field_name,
                 )
             elif field_type == "radio":
+                options = field.get("options", [])
+                default_index = 0
+                if options:
+                    last_option = options[-1]
+                    if isinstance(last_option, str) and last_option.strip().lower() == "do not wish to answer":
+                        default_index = len(options) - 1
                 responses[field_name] = st.radio(
                     field_label,
-                    field.get("options", []),
+                    options,
                     key=field_name,
                     horizontal=True,
+                    index=default_index,
                 )
             elif field_type == "checkbox":
                 responses[field_name] = st.multiselect(
