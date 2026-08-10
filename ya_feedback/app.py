@@ -9,11 +9,26 @@ from google.oauth2.service_account import Credentials
 
 load_dotenv()
 
-SERVICE_ACCOUNT_FILE = os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE", "credentials.json")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+def resolve_path(path_value: str, default: str):
+    if path_value is None:
+        return os.path.join(BASE_DIR, default)
+    path_value = os.path.expanduser(path_value)
+    if not os.path.isabs(path_value):
+        path_value = os.path.join(BASE_DIR, path_value)
+    return path_value
+
+
+SERVICE_ACCOUNT_FILE = resolve_path(
+    os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE"),
+    "credentials.json",
+)
 SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
 SHEET_URL = os.getenv("GOOGLE_SHEET_URL")
 WORKSHEET_NAME = os.getenv("GOOGLE_WORKSHEET_NAME", "Feedback")
-CONFIG_FILE = os.getenv("FORM_CONFIG_FILE", "form_config.json")
+CONFIG_FILE = resolve_path(os.getenv("FORM_CONFIG_FILE", "form_config.json"), "form_config.json")
 
 
 def get_service_credentials():
@@ -25,13 +40,22 @@ def get_service_credentials():
         return Credentials.from_service_account_info(service_account_info)
 
     try:
-        secret_data = st.secrets["google"]["service_account_json"]
-        return Credentials.from_service_account_info(secret_data)
+        google_secret = st.secrets.get("google", {})
+        secret_data = google_secret.get("service_account_json")
+        if not secret_data:
+            raise KeyError("Missing google.service_account_json in Streamlit secrets")
+
+        if isinstance(secret_data, str):
+            service_account_info = json.loads(secret_data)
+        else:
+            service_account_info = secret_data
+
+        return Credentials.from_service_account_info(service_account_info)
     except Exception:
         raise FileNotFoundError(
             "No Google service account credentials were found. "
             "Use either a local credentials.json file, a GOOGLE_SERVICE_ACCOUNT_JSON env var, "
-            "or Streamlit Cloud secrets for the Google service account JSON."
+            "or a local .streamlit/secrets.toml / Streamlit Cloud secret named google.service_account_json."
         )
 
 
